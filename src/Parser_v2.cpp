@@ -47,8 +47,12 @@ int main()
 		if (buf[it] == 0x4D && buf[it + 1] == 0x42) {
 			//next data after type information bytes
 			it += 2;
-			tm.module_data_length = buf[it] + buf[it + 1];
-			int count_frames = ((tm.module_data_length - 2 - 2 - 1) / 29);// 2-type length, 2-module data length,1- verification length, 29- frame size
+			tm.module_data_length = buf[it] << 8 | buf[it + 1];;
+			int type_length = 2;
+			int module_data_length = 2;
+			int verification_length = 1;
+			int frame_size = 29;
+			int count_frames = ((tm.module_data_length - type_length - module_data_length - verification_length) / frame_size);
 
 			of << "Target message module." << '\n';
 			of << "Module data length: " << tm.module_data_length << '\n';
